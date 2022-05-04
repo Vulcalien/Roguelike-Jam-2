@@ -1,0 +1,5 @@
+# LuaG Cartridges
+*.luag
+
+# vim
+*.swp
