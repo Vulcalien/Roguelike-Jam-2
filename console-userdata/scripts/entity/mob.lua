@@ -11,6 +11,30 @@ local function move2(mob, xm, ym)
         return false
     end
 
+    -- check for solid entities
+    for i,e in ipairs(level.entities) do
+        if e == mob then
+            goto loop_end
+        end
+
+        if mob.x - mob.xr + xm <= e.x + e.xr and
+           mob.y - mob.yr + ym <= e.y + e.yr and
+           mob.x + mob.xr + xm >= e.x - e.xr and
+           mob.y + mob.yr + ym >= e.y - e.yr then
+            if mob.touch then
+                mob:touch(e)
+            end
+
+            if e.touched_by then
+                e:touched_by(mob)
+            end
+
+            return false
+        end
+
+        ::loop_end::
+    end
+
     mob.x = mob.x + xm
     mob.y = mob.y + ym
     return true
@@ -43,6 +67,9 @@ function new_Mob()
 
         self.mov_animation = self.mov_animation + 1
     end
+
+    result.touch = function(self, e) end
+    result.touched_by = function(self, e) end
 
     return result
 end

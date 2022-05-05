@@ -11,14 +11,22 @@ function init()
     loadscript('entity/mob.lua')
     loadscript('entity/player.lua')
 
+    loadscript('entity/enemy.lua')
+    loadscript('entity/virus.lua')
+
     loadscript('menu/game.lua')
     loadscript('menu/pause.lua')
 
     level = new_Level()
 
     player = new_Player()
+    level:insert(player)
+
+    -- DEBUG
     player.x = map_w * 8 // 2
     player.y = map_h * 8 // 2
+
+    level:insert(new_Virus(3, 3))
 end
 
 function tick()
@@ -26,7 +34,6 @@ function tick()
         menu:tick()
     else
         level:tick()
-        player:tick()
     end
 
     ticks = ticks + 1
@@ -49,7 +56,6 @@ function render()
     end
 
     level:render()
-    player:render()
 
     if menu then
         menu:render()
