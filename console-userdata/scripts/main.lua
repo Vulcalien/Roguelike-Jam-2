@@ -11,6 +11,9 @@ function init()
     loadscript('entity/mob.lua')
     loadscript('entity/player.lua')
 
+    loadscript('menu/game.lua')
+    loadscript('menu/pause.lua')
+
     level = new_Level()
 
     player = new_Player()
@@ -19,8 +22,12 @@ function init()
 end
 
 function tick()
-    level:tick()
-    player:tick()
+    if menu then
+        menu:tick()
+    else
+        level:tick()
+        player:tick()
+    end
 
     ticks = ticks + 1
 end
@@ -43,4 +50,8 @@ function render()
 
     level:render()
     player:render()
+
+    if menu then
+        menu:render()
+    end
 end

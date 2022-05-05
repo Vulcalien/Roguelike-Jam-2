@@ -4,6 +4,9 @@ function new_Player()
     result.xr = 2
     result.yr = 4
 
+    result.stats = {
+    }
+
     result.tick = function(self)
         local xm = 0
         local ym = 0
@@ -14,6 +17,14 @@ function new_Player()
         if key('right') then xm = xm + 1 end
 
         self:move(xm, ym)
+
+        if key_pressed('select') then
+            menu = menu_game
+        end
+
+        if key_pressed('start') then
+            menu = menu_pause
+        end
     end
 
     result.render = function(self)
