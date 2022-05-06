@@ -12,7 +12,7 @@ local function move2(mob, xm, ym)
     end
 
     -- check for solid entities
-    for i,e in ipairs(level.entities) do
+    for i,e in ipairs(level.room.entities) do
         if e == mob then
             goto loop_end
         end
