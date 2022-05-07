@@ -5,6 +5,16 @@ local map_panel = {
     end,
 
     render = function(self)
+        for i,room in ipairs(level.rooms) do
+            local col
+
+            if level.room == room then
+                col = 0xff0000
+            else
+                col = i % 2 == 0 and 0xddddee or 0xccccee
+            end
+            write(' ' .. room.name, col, 0, i * (font_h + 1))
+        end
     end
 }
 
@@ -80,7 +90,7 @@ menu_game = {
             '|                         |\n' ..
             '|                         |\n' ..
             '*-------------------------*',
-            0xffffff, 0, 0
+            0xddddee, 0, 0
         );
 
         self.panel:render()
