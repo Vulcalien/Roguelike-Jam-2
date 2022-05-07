@@ -18,6 +18,14 @@ function new_Player()
 
         self:move(xm, ym)
 
+        if key_pressed('a') then
+            self.item_a:use(self)
+        end
+
+        if key_pressed('b') then
+            self.item_b:use(self)
+        end
+
         if key_pressed('select') then
             menu = menu_game
         end
