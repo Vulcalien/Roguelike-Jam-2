@@ -47,6 +47,45 @@ local name_pools = {
     }
 }
 
+local function get_name(name_pool, used_names)
+    -- try 3 times to get a random name
+    for i=1,3 do
+        local name_index = math.random(2, #name_pool)
+
+        local contains = false
+        for j=1,#used_names do
+            if used_names[j] == name_index then
+                contains = true
+                break
+            end
+        end
+
+        if contains == false then
+            table.insert(used_names, name_index)
+            return name_pool[name_index];
+        end
+    end
+
+    -- a name was not found: just use the first unused name
+    for i=2,#name_pool do
+        local contains = false
+        for j=1,#used_names do
+            if used_names[j] == i then
+                contains = true
+                break
+            end
+        end
+
+        if contains == false then
+            table.insert(used_names, i)
+            return name_pool[i]
+        end
+    end
+
+    print('Error: get_name failed')
+    return nil
+end
+
 local function new_Room(name, name_pool, used_names, room_count)
     local room = {
         name = name,
@@ -81,57 +120,21 @@ local function new_Room(name, name_pool, used_names, room_count)
         end
     }
 
-    room_count = room_count - 1
-    if room_count ~= 0 then
-        local next_name = nil
-
-        -- try 3 times to get a random name
-        for i=1,3 do
-            local name_index = math.random(2, #name_pool)
-
-            local contains = false
-            for j=1,#used_names do
-                if used_names[j] == name_index then
-                    contains = true
-                    break
-                end
-            end
-
-            if contains == false then
-                next_name = name_pool[name_index]
-                table.insert(used_names, name_index)
-                break
-            end
-        end
-
-        -- if the name is still unset, just use the first unused name
-        if next_name == nil then
-            for i=2,#name_pool do
-                local contains = false
-                for j=1,#used_names do
-                    if used_names[j] == i then
-                        contains = true
-                        break
-                    end
-                end
-
-                if contains == false then
-                    next_name = name_pool[i]
-                    table.insert(used_names, i)
-                    break
-                end
-            end
-        end
-
-        room.next_room = new_Room(next_name, name_pool, used_names, room_count)
-    end
-
     return room
 end
 
 local function generate_rooms(name_pool)
+    local result = {}
+
     local room_count = math.random(5, #name_pool)
-    return new_Room(name_pool[1], name_pool, {}, room_count)
+    local used_names = {}
+
+    result[1] = new_Room(name_pool[1])
+    for i=2,room_count do
+        result[i] = new_Room(get_name(name_pool, used_names))
+    end
+
+    return result
 end
 
 function new_Level()
@@ -154,7 +157,11 @@ function new_Level()
     }
 
     local name_pool = name_pools[math.random(1, #name_pools - 1)]
-    result.room = generate_rooms(name_pool)
+
+    result.rooms = generate_rooms(name_pool)
+
+    result.room_index = 1
+    result.room = result.rooms[1]
 
     return result
 end
