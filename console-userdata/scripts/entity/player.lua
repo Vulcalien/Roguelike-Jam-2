@@ -19,11 +19,15 @@ function new_Player()
         self:move(xm, ym)
 
         if key_pressed('a') then
-            self.item_a:use(self)
+            if self.item_a then
+                self.item_a:use(self)
+            end
         end
 
         if key_pressed('b') then
-            self.item_b:use(self)
+            if self.item_b then
+                self.item_b:use(self)
+            end
         end
 
         if key_pressed('select') then

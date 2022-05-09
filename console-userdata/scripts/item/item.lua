@@ -2,7 +2,7 @@ function new_Item(name, icon, icon_col)
     return {
         name = name,
         icon = icon,
-        icon_col = icon_col
+        icon_col = icon_col,
 
         use = function(self, player) end,
 

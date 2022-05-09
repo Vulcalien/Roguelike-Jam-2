@@ -14,12 +14,19 @@ function init()
     loadscript('entity/enemy.lua')
     loadscript('entity/virus.lua')
 
+    loadscript('entity/particle/particle.lua')
+    loadscript('entity/particle/spray.lua')
+
+    loadscript('item/item.lua')
+    loadscript('item/spray.lua')
+
     loadscript('menu/game.lua')
     loadscript('menu/pause.lua')
 
     level = new_Level()
 
     player = new_Player()
+    player.item_a = new_Spray(2)
     level:insert(player)
 
     -- DEBUG

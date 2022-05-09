@@ -17,10 +17,7 @@ local function move2(mob, xm, ym)
             goto loop_end
         end
 
-        if mob.x - mob.xr + xm <= e.x + e.xr and
-           mob.y - mob.yr + ym <= e.y + e.yr and
-           mob.x + mob.xr + xm >= e.x - e.xr and
-           mob.y + mob.yr + ym >= e.y - e.yr then
+        if e:intersects(mob.x + xm, mob.y + ym, mob.xr, mob.yr) then
             if mob.touch then
                 mob:touch(e)
             end
@@ -29,7 +26,9 @@ local function move2(mob, xm, ym)
                 e:touched_by(mob)
             end
 
-            return false
+            if e:blocks_movement(mob) then
+                return false
+            end
         end
 
         ::loop_end::
@@ -42,6 +41,10 @@ end
 
 function new_Mob()
     local result = new_Entity()
+
+    result.blocks_movement = function(self, e)
+        return true
+    end
 
     -- by default, all mobs face towards the screen
     result.dir = 2
