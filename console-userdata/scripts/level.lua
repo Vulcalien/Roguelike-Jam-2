@@ -66,14 +66,32 @@ local function new_Room(name)
         end,
 
         entities = {},
+        enemy_count = 0,
 
         insert = function(self, entity)
+            if entity.is_enemy then
+                self.enemy_count = self.enemy_count + 1
+            end
+
             table.insert(self.entities, entity)
         end,
 
         remove = function(self, entity)
             for i,e in ipairs(self.entities) do
                 if e == entity then
+                    if entity.is_enemy then
+                        self.enemy_count = self.enemy_count - 1
+
+                        if self.enemy_count == 0 then
+                            level:insert(
+                                new_Portal_particle(
+                                    math.random(0, map_w),
+                                    math.random(0, map_h)
+                                )
+                            )
+                        end
+                    end
+
                     table.remove(self.entities, i)
                     break
                 end
