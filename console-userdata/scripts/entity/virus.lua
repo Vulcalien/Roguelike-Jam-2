@@ -13,6 +13,7 @@ function new_Virus(x0, y0)
     result.fertility = 3
 
     result.is_pregnant = false
+    result.pause_time = 1
     result.walk_time = 0
     result.pregnant_delivery_time = 0
 
@@ -23,8 +24,25 @@ function new_Virus(x0, y0)
             return
         end
 
-        -- TODO use a better pathfinder ???
-        if not self.is_pregnant or self.walk_time > 0 then
+        local xdiff = math.abs(player.x - self.x)
+        local ydiff = math.abs(player.y - self.y)
+
+        if self.walk_time > 0 then
+            self.walk_time = self.walk_time - 1
+
+            if self.walk_time == 0 then
+                -- if pregnant, start the delivery time
+                if self.is_pregnant then
+                    if self.fertility > 0 then
+                        self.pregnant_delivery_time = DELIVERY_TIME
+                    else
+                        self.is_pregnant = false
+                    end
+                end
+
+                self.pause_time = math.random(120, 240)
+            end
+
             if self.ignore_one_axis_time == 0 and math.random(1, 50) == 1 then
                 self.ignore_one_axis_time = math.random(30, 120)
             end
@@ -49,8 +67,6 @@ function new_Virus(x0, y0)
 
             -- ignore one axis sometimes, just to add variety to the movement
             if xm ~= 0 and ym ~= 0 and self.ignore_one_axis_time > 0 then
-                local xdiff = math.abs(player.x - self.x)
-                local ydiff = math.abs(player.y - self.y)
                 if xdiff < ydiff then
                     xm = 0
                 elseif xdiff > ydiff then
@@ -63,19 +79,7 @@ function new_Virus(x0, y0)
             self:move(xm, ym)
         end
 
-        if self.is_pregnant and self.walk_time > 0 then
-            self.walk_time = self.walk_time - 1
-
-            if self.walk_time == 0 then
-                if self.fertility > 0 then
-                    self.pregnant_delivery_time = DELIVERY_TIME
-                else
-                    self.is_pregnant = false
-                end
-            end
-        end
-
-        if self.is_pregnant and self.walk_time == 0 then
+        if self.is_pregnant then
             self.pregnant_delivery_time = self.pregnant_delivery_time - 1
 
             if self.pregnant_delivery_time == 0 then
@@ -91,6 +95,18 @@ function new_Virus(x0, y0)
                 level:insert(child)
             end
         end
+
+        if self.pause_time > 0 then
+            if xdiff + ydiff > 8 * 4 then
+                self.pause_time = self.pause_time - 1
+            else
+                self.pause_time = 0
+            end
+
+            if self.pause_time == 0 then
+                self.walk_time = math.random(240, 480)
+            end
+        end
     end
 
     result.render = function(self)
@@ -98,9 +114,10 @@ function new_Virus(x0, y0)
 
         if debug_info then
             write(
-                'ignore axis time: ' .. self.ignore_one_axis_time ..
+                'walk time: ' .. self.walk_time ..
+                '\npause time: ' .. self.pause_time ..
+                '\nignore axis time: ' .. self.ignore_one_axis_time ..
                 '\npregnant: ' .. (self.is_pregnant and 1 or 0) ..
-                '\n walk time: ' .. self.walk_time ..
                 '\n delivery time: ' .. self.pregnant_delivery_time,
                 0x000000, self.x, self.y
             )
