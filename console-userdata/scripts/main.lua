@@ -1,7 +1,7 @@
 -- For Documentation, see 'https://github.com/Vulcalien/LuaG-Console/wiki'
 
 function init()
-    --debug_info = true
+    debug_info = false
 
     ticks = 0
 
@@ -26,10 +26,11 @@ function init()
     loadscript('menu/game.lua')
     loadscript('menu/pause.lua')
 
+    lvl = 1
     level = new_Level()
 
     player = new_Player()
-    player.item_a = new_Spray(2)
+    player.item_a = new_Spray()
     level:insert(player)
 
     -- DEBUG
@@ -37,6 +38,7 @@ function init()
     player.y = map_h * 8 // 2
 
     level:insert(new_Virus(3, 3))
+
     level:insert(new_Portal_particle(4, 5))
 end
 

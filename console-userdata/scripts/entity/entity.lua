@@ -20,6 +20,9 @@ function new_Entity(x, y)
 
         blocks_movement = function(self, e)
             return false
-        end
+        end,
+
+        touch = function(self, e) end,
+        touched_by = function(self, e) end
     }
 end

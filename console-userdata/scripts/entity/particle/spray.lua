@@ -1,4 +1,4 @@
-function new_Spray_particle(x, y, col)
+function new_Spray_particle(x, y, col, dmg)
     local result = new_Particle(x, y, 80)
     result.entity_type['particle_spray'] = true
 
@@ -12,6 +12,8 @@ function new_Spray_particle(x, y, col)
             }
         )
     end
+
+    result.dmg = dmg
 
     return result
 end

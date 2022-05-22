@@ -2,7 +2,7 @@ local WALK_TIME     = 120
 local DELIVERY_TIME = 180
 
 function new_Virus(x0, y0)
-    local result = new_Enemy()
+    local result = new_Enemy(30)
     result.entity_type['virus'] = true
 
     result.x = x0 * 8
@@ -28,7 +28,7 @@ function new_Virus(x0, y0)
         local xdiff = math.abs(player.x - self.x)
         local ydiff = math.abs(player.y - self.y)
 
-        if self.walk_time > 0 then
+        if self.walk_time > 0 and self.invulnerability == 0 then
             self.walk_time = self.walk_time - 1
 
             if self.walk_time == 0 then
@@ -80,6 +80,10 @@ function new_Virus(x0, y0)
             self:move(xm, ym)
         end
 
+        if self.invulnerability > 0 then
+            self.invulnerability = self.invulnerability - 1
+        end
+
         if self.is_pregnant then
             self.pregnant_delivery_time = self.pregnant_delivery_time - 1
 
@@ -111,10 +115,14 @@ function new_Virus(x0, y0)
     end
 
     result.render = function(self)
-        spr(self.is_pregnant and 6 or 5, self.x - 4, self.y - 4, {
-            h_flip = (ticks // 18) % 2 == 0,
-            v_flip = ((ticks + 31) // 18) % 2 == 0
-        })
+        if self.invulnerability == 0 or (ticks // 10) % 2 == 0 then
+            spr(self.is_pregnant and 6 or 5, self.x - 4, self.y - 4, {
+                h_flip = (ticks // 18) % 2 == 0,
+                v_flip = ((ticks + 31) // 18) % 2 == 0
+            })
+
+            self:draw_hp_bar()
+        end
 
         if debug_info then
             write(
@@ -132,6 +140,16 @@ function new_Virus(x0, y0)
         if e.entity_type['player'] then
             self.is_pregnant = true
             self.walk_time = WALK_TIME
+        end
+
+        if e.entity_type['particle_spray'] and self.invulnerability == 0 then
+            self.hp = self.hp - e.dmg
+            self.invulnerability = ENEMY_INVULNERABILITY
+
+            if self.hp <= 0 then
+                level:remove(self)
+                -- TODO add virus death animation
+            end
         end
     end
 

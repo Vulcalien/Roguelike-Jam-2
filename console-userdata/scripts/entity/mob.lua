@@ -39,13 +39,16 @@ local function move2(mob, xm, ym)
     return true
 end
 
-function new_Mob()
+function new_Mob(max_hp)
     local result = new_Entity()
     result.entity_type['mob'] = true
 
     result.blocks_movement = function(self, e)
         return true
     end
+
+    result.max_hp = max_hp
+    result.hp = max_hp
 
     -- by default, all mobs face towards the screen
     result.dir = 2
@@ -71,9 +74,6 @@ function new_Mob()
 
         self.mov_animation = self.mov_animation + 1
     end
-
-    result.touch = function(self, e) end
-    result.touched_by = function(self, e) end
 
     return result
 end
