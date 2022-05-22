@@ -1,5 +1,7 @@
 function new_Entity(x, y)
     return {
+        entity_type = {},
+
         x = x,
         y = y,
 

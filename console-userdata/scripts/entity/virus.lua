@@ -3,6 +3,7 @@ local DELIVERY_TIME = 180
 
 function new_Virus(x0, y0)
     local result = new_Enemy()
+    result.entity_type['virus'] = true
 
     result.x = x0 * 8
     result.y = y0 * 8
@@ -128,7 +129,7 @@ function new_Virus(x0, y0)
     end
 
     result.touch = function(self, e)
-        if e == player then
+        if e.entity_type['player'] then
             self.is_pregnant = true
             self.walk_time = WALK_TIME
         end

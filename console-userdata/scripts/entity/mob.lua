@@ -41,6 +41,7 @@ end
 
 function new_Mob()
     local result = new_Entity()
+    result.entity_type['mob'] = true
 
     result.blocks_movement = function(self, e)
         return true

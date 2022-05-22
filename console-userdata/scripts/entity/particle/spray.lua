@@ -1,5 +1,6 @@
 function new_Spray_particle(x, y, col)
     local result = new_Particle(x, y, 80)
+    result.entity_type['particle_spray'] = true
 
     result.render = function(self)
         spr(

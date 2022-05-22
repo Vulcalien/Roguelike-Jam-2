@@ -1,5 +1,6 @@
 function new_Particle(x, y, lasting_time)
     local result = new_Entity(x, y)
+    result.entity_type['particle'] = true
 
     result.lasting_time = lasting_time
 

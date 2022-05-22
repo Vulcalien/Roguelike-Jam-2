@@ -1,5 +1,6 @@
 function new_Portal_particle(xt, yt)
     local result = new_Particle(xt * 8 + 4, yt * 8 + 4, 100)
+    result.entity_type['particle_portal'] = true
 
     result.render = function(self)
         spr(

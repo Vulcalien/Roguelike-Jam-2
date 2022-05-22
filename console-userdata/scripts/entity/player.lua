@@ -1,5 +1,6 @@
 function new_Player()
     local result = new_Mob()
+    result.entity_type['player'] = true
 
     result.xr = 2
     result.yr = 4
