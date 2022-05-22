@@ -3,12 +3,9 @@ function new_Portal_particle(xt, yt)
     result.entity_type['particle_portal'] = true
 
     result.render = function(self)
-        spr(
-            69, self.x - 4, self.y - 4,
-            {
-                alpha = math.floor(0xff * (100 - result.lasting_time) / 100)
-            }
-        )
+        spr(69, self.x - 4, self.y - 4, {
+            alpha = math.floor(0xff * (100 - result.lasting_time) / 100)
+        })
     end
 
     result.on_remove = function(self)

@@ -17,6 +17,7 @@ function init()
     loadscript('entity/virus.lua')
 
     loadscript('entity/particle/particle.lua')
+    loadscript('entity/particle/text.lua')
     loadscript('entity/particle/spray.lua')
     loadscript('entity/particle/portal.lua')
 

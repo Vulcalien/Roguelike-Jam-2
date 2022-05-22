@@ -144,6 +144,10 @@ function new_Virus(x0, y0)
 
         if e.entity_type['particle_spray'] and self.invulnerability == 0 then
             self.hp = self.hp - e.dmg
+            level:insert(
+                new_Text_particle(self.x, self.y, e.dmg .. '', 0xff3333)
+            )
+
             self.invulnerability = ENEMY_INVULNERABILITY
 
             if self.hp <= 0 then
