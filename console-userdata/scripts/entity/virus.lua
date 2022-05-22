@@ -110,7 +110,10 @@ function new_Virus(x0, y0)
     end
 
     result.render = function(self)
-        spr(3, self.x - 4, self.y - 4)
+        spr(self.is_pregnant and 6 or 5, self.x - 4, self.y - 4, {
+            h_flip = (ticks // 18) % 2 == 0,
+            v_flip = ((ticks + 31) // 18) % 2 == 0
+        })
 
         if debug_info then
             write(
